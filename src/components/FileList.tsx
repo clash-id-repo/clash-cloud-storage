@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import { DocumentIcon, ListBulletIcon, Squares2X2Icon } from '@heroicons/react/24/outline';
 import { formatBytes, formatDate } from '../utils/format';
@@ -19,6 +17,16 @@ export function FileList({ files, onFileClick, viewMode, onViewModeChange }: Fil
   const handleViewChange = (mode: ViewMode) => {
     onViewModeChange?.(mode);
   };
+
+  const renderIcon = (file: FileItem, isGrid: boolean = false) => (
+    <div className={`bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 rounded-lg ${
+      isGrid ? 'p-2 sm:p-3' : 'p-1 sm:p-1.5'
+    } transition-transform duration-300 group-hover:scale-110`}>
+      <DocumentIcon className={`${
+        isGrid ? 'h-6 w-6 sm:h-8 sm:w-8' : 'h-4 w-4 sm:h-5 sm:w-5'
+      } text-white`} />
+    </div>
+  );
 
   if (viewMode === 'grid') {
     return (
@@ -63,7 +71,7 @@ export function FileList({ files, onFileClick, viewMode, onViewModeChange }: Fil
               <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-blue-500/0 to-purple-500/0 opacity-0 group-hover:opacity-100 group-hover:from-blue-500/[0.03] group-hover:to-purple-500/[0.03] transition-all duration-300" />
               <div className="relative">
                 <div className="aspect-square mb-3 rounded-lg bg-gradient-to-br from-blue-500/[0.03] via-purple-500/[0.03] to-pink-500/[0.03] group-hover:from-blue-500/[0.05] group-hover:via-purple-500/[0.05] group-hover:to-pink-500/[0.05] flex items-center justify-center transition-all duration-300">
-                  <DocumentIcon className="h-12 w-12 text-blue-600 dark:text-blue-400 transition-transform duration-300 group-hover:scale-110" />
+                  {renderIcon(file, true)}
                 </div>
                 <div className="space-y-1">
                   <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
@@ -131,10 +139,8 @@ export function FileList({ files, onFileClick, viewMode, onViewModeChange }: Fil
             >
               <td className="whitespace-nowrap py-3 sm:py-4 pl-4 pr-3 text-xs sm:text-sm sm:pl-6">
                 <div className="flex items-center">
-                  <div className="bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 rounded-lg p-1 sm:p-1.5 mr-2 sm:mr-3 transition-transform duration-300 group-hover:scale-110">
-                    <DocumentIcon className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
-                  </div>
-                  <span className="font-medium text-gray-900 dark:text-gray-200 truncate max-w-[150px] sm:max-w-none">
+                  {renderIcon(file)}
+                  <span className="font-medium text-gray-900 dark:text-gray-200 truncate max-w-[150px] sm:max-w-none ml-2 sm:ml-3">
                     {file.name}
                   </span>
                 </div>

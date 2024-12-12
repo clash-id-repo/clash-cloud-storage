@@ -1,5 +1,3 @@
-'use client';
-
 import { useState, useEffect } from 'react';
 import { MagnifyingGlassIcon, XMarkIcon, DocumentIcon } from '@heroicons/react/24/outline';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -16,10 +14,8 @@ interface SearchBarProps {
 
 export function SearchBar({ value, onChange, onOpenChange, files, onFileClick }: SearchBarProps) {
   const [isOpen, setIsOpen] = useState(false);
-
-  const filteredFiles = files.filter(file =>
-    file.name.toLowerCase().includes(value.toLowerCase())
-  );
+  const [searchResults, setSearchResults] = useState<FileItem[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -38,6 +34,40 @@ export function SearchBar({ value, onChange, onOpenChange, files, onFileClick }:
       document.body.style.overflow = 'unset';
     };
   }, [isOpen]);
+
+  useEffect(() => {
+    const fetchSearchResults = async () => {
+      if (!value.trim()) {
+        setSearchResults([]);
+        return;
+      }
+
+      setIsLoading(true);
+      try {
+        const params = new URLSearchParams({
+          search: value,
+          pid: '0'
+        });
+        const response = await fetch(`/api/files?${params}`);
+        const data = await response.json();
+        
+        if (data.success) {
+          setSearchResults(data.data.list);
+        } else {
+          console.error('Search failed:', data.error);
+          setSearchResults([]);
+        }
+      } catch (error) {
+        console.error('Search error:', error);
+        setSearchResults([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    const debounceTimer = setTimeout(fetchSearchResults, 300);
+    return () => clearTimeout(debounceTimer);
+  }, [value]);
 
   const openSearch = () => {
     setIsOpen(true);
@@ -111,10 +141,15 @@ export function SearchBar({ value, onChange, onOpenChange, files, onFileClick }:
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-4 bg-white dark:bg-gray-800 rounded-xl shadow-2xl ring-1 ring-gray-900/5 overflow-hidden max-h-[60vh] overflow-y-auto"
                 >
-                  {value ? (
-                    filteredFiles.length > 0 ? (
+                  {isLoading ? (
+                    <div className="p-4 text-center text-gray-500 dark:text-gray-400">
+                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500 mx-auto mb-2"></div>
+                      Searching...
+                    </div>
+                  ) : value ? (
+                    searchResults.length > 0 ? (
                       <div className="divide-y divide-gray-100 dark:divide-gray-700">
-                        {filteredFiles.map((file) => (
+                        {searchResults.map((file) => (
                           <motion.div
                             key={file.id}
                             initial={{ opacity: 0 }}
@@ -156,7 +191,7 @@ export function SearchBar({ value, onChange, onOpenChange, files, onFileClick }:
                   )}
                   <div className="p-3 bg-gray-50 dark:bg-gray-900/50 text-xs text-gray-500 dark:text-gray-400 flex justify-between items-center">
                     <span>Press <kbd className="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">ESC</kbd> to close</span>
-                    <span>{filteredFiles.length} results</span>
+                    <span>{searchResults.length} results</span>
                   </div>
                 </motion.div>
               </div>

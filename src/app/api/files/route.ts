@@ -52,15 +52,17 @@ async function getFileList(token: string, pid: string = "0", filterSearch: strin
     sortAsc: '0',
     pageNo: '1',
     pageSize: '9999',
+    isVip: 'true',
+    verc: '15004001',
     pid,
     name: filterSearch,
     token,
-    platform: 'web',
-    pf: 'web',
+    platform: 'android',
+    pf: 'android',
     lan: 'en'
   });
 
-  const response = await fetch(`${BASE_API}/file/my_file_list/web?${params}`, {
+  const response = await fetch(`${BASE_API}/file/my_file_list/android?${params}`, {
     cache: 'no-store',
     headers: {
       'X-Forwarded-For': clientIP,

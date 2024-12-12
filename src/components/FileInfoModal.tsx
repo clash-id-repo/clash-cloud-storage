@@ -1,5 +1,3 @@
-'use client';
-
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 import { XMarkIcon, DocumentIcon, CloudArrowDownIcon, ShareIcon, CheckIcon } from '@heroicons/react/24/outline';
@@ -7,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FileItem } from '@/types/file';
 import { formatBytes, formatDate } from '@/utils/format';
 import { DownloadProgress } from './DownloadProgress';
+import { MediaPlayer } from './MediaPlayer';
 
 interface FileInfoModalProps {
   file: FileItem | null;
@@ -20,7 +19,7 @@ interface Download {
   url: string;
   fileName: string;
   fileSize: number;
-  itemId?: string; // Add itemId for fallback
+  itemId?: string;
 }
 
 export function FileInfoModal({ file, isOpen, onClose, onDownload }: FileInfoModalProps) {
@@ -52,6 +51,7 @@ export function FileInfoModal({ file, isOpen, onClose, onDownload }: FileInfoMod
     }
   };
 
+  const isMediaFile = file.type === 'video' || file.type === 'audio';
   const fileExtension = file.name.split('.').pop()?.toUpperCase() || 'FILE';
 
   return (
@@ -81,7 +81,7 @@ export function FileInfoModal({ file, isOpen, onClose, onDownload }: FileInfoMod
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 p-6 text-left align-middle shadow-xl transition-all">
                   <div className="absolute top-4 right-4">
                     <button
                       onClick={onClose}
@@ -114,6 +114,17 @@ export function FileInfoModal({ file, isOpen, onClose, onDownload }: FileInfoMod
                     </div>
                   </div>
 
+                  {/* Media Player */}
+                  {isMediaFile && file.url && (
+                    <div className="mb-6">
+                      <MediaPlayer
+                        url={file.url}
+                        type={file.type as 'video' | 'audio'}
+                        fileName={file.name}
+                      />
+                    </div>
+                  )}
+
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -121,7 +132,7 @@ export function FileInfoModal({ file, isOpen, onClose, onDownload }: FileInfoMod
                   >
                     <div className="grid grid-cols-2 gap-4">
                       {[
-                        { label: 'Type', value: file.type },
+                        { label: 'Extension', value: fileExtension },
                         { label: 'Size', value: formatBytes(file.size) },
                         { label: 'Created', value: formatDate(file.ctime) },
                         { label: 'Modified', value: formatDate(file.utime) }

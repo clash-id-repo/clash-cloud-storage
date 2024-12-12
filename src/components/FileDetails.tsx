@@ -19,6 +19,7 @@ interface FileDetailsProps {
     size: number;
     type: string;
     ctime: number;
+    url?: string;
   };
   onDownload?: () => void;
   onShare?: () => void;
@@ -121,6 +122,37 @@ export function FileDetails({ file, onDownload, onShare }: FileDetailsProps) {
             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Copy Name</span>
           </motion.button>
         </div>
+
+        {/* URL Display */}
+        {file.url && (
+          <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-700">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.7 }}
+              className="flex items-center gap-2"
+            >
+              <input 
+                type="text" 
+                value={file.url} 
+                readOnly 
+                className="flex-1 p-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-700 dark:text-gray-300 focus:outline-none"
+              />
+              <motion.button
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.8 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => navigator.clipboard.writeText(file.url || '')}
+                className="flex items-center gap-1 px-3 py-2 rounded-xl bg-gradient-to-r from-blue-500/10 to-purple-500/10 hover:from-blue-500/20 hover:to-purple-500/20 transition-all duration-200"
+              >
+                <DocumentDuplicateIcon className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                <span className="text-xs font-medium text-gray-700 dark:text-gray-300">Copy URL</span>
+              </motion.button>
+            </motion.div>
+          </div>
+        )}
 
         {/* File details */}
         <div className="p-6">
