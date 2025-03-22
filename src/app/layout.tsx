@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 import { Providers } from '@/components/Providers';
 
 export const metadata: Metadata = {
-  title: 'Clash Id Cloud',
+  title: 'CLASH ID Cloud',
   description: 'Private Cloud Storage',
   icons: {
     icon: '/favicon.ico',
