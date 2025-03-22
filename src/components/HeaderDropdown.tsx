@@ -16,7 +16,7 @@ export function HeaderDropdown() {
       <div className="flex items-center">
         <Menu.Button className="group inline-flex items-center">
           <span className="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
-            CLASH ID Cloud
+            CLASH ID CLOUD
           </span>
           <ChevronDownIcon
             className="ml-2 h-5 w-5 sm:h-6 sm:w-6 text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-100 transition-colors"
