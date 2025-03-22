@@ -16,7 +16,7 @@ export function HeaderDropdown() {
       <div className="flex items-center">
         <Menu.Button className="group inline-flex items-center">
           <span className="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
-            JemPH Cloud
+            CLASH ID Cloud
           </span>
           <ChevronDownIcon
             className="ml-2 h-5 w-5 sm:h-6 sm:w-6 text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-100 transition-colors"
@@ -39,7 +39,7 @@ export function HeaderDropdown() {
             <Menu.Item>
               {({ active }) => (
                 <a
-                  href="https://t.me/JemPH"
+                  href="https://t.me/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`${
@@ -54,7 +54,7 @@ export function HeaderDropdown() {
             <Menu.Item>
               {({ active }) => (
                 <a
-                  href="https://github.com/JemPH"
+                  href="https://github.com/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`${
